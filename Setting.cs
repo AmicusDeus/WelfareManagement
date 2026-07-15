@@ -19,10 +19,13 @@ namespace WelfareManagement
         // of falling back to 0, which would silently scale a benefit to zero.
 
         // ---- Citizen benefits (percent of vanilla; 100% = unchanged) ----
-        // Opt-out: ON by default so the mod is active on install. When on, the real benefit outlay is deducted from
-        // the city treasury (and shown as a budget cost). Turn OFF for vanilla (the game mints them free).
+        // Opt-IN: OFF by default (safe = pure vanilla, the game mints benefits free). When ON, the real benefit outlay
+        // is deducted from the city treasury (shown as a budget cost). WARNING: benefits are administered by a welfare
+        // office — with this ON and NO welfare office in the city, benefits are gated to ZERO (citizens receive
+        // nothing), which starves non-working households of income and shrinks the population. Build a welfare office,
+        // or leave this OFF. (Default flipped to OFF in v1.1 so this can't be hit by accident.)
         [SettingsUISection(Section, GroupBenefits)]
-        public bool BenefitsFundedByTreasury { get; set; } = true;
+        public bool BenefitsFundedByTreasury { get; set; } = false;
 
         [SettingsUISlider(min = 0f, max = 200f, step = 5f, unit = "percentage")]
         [SettingsUISection(Section, GroupBenefits)]
@@ -44,7 +47,7 @@ namespace WelfareManagement
 
         public override void SetDefaults()
         {
-            BenefitsFundedByTreasury = true;
+            BenefitsFundedByTreasury = false;
             PensionPercent = 100f;
             UnemploymentBenefitPercent = 100f;
             FamilyAllowancePercent = 100f;

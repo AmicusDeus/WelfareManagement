@@ -1,6 +1,6 @@
 <Publish>
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
-	<ModId Value="" />
+	<ModId Value="151387" />
 	<!--Name of the mod to display to players-->
 	<DisplayName Value="Welfare Management" />
 	<!--Short description of the mod-->
@@ -9,9 +9,11 @@
 	<LongDescription>
 Vanilla Cities: Skylines II "mints" pensions, unemployment and family allowance straight into households at no cost to the city. Welfare Management turns benefits into a real budget item and gives you control over them.
 
-- Treasury-funded benefits: the real daily outlay is deducted from the city treasury and shown as a budget expense (Subsidies). Turn it off for exact vanilla behaviour.
+- Treasury-funded benefits: the real daily outlay is deducted from the city treasury and shown as a budget expense (Subsidies). OFF BY DEFAULT — turn it on to enable; off = exact vanilla behaviour.
 - Scale each benefit 0-200% (100% = vanilla) — pension, unemployment, family allowance.
 - Welfare-office gate: with funding on, benefits are only paid if your city has at least one welfare office. No office = benefits suspended (citizens genuinely receive nothing; the treasury pays nothing). No minting, ever.
+
+WARNING — read before enabling treasury funding: because benefits are administered by a welfare office, turning funding ON while your city has NO welfare office suspends benefits entirely. Pensioners, out-of-work adults and families then receive nothing, run out of money, and leave — so your POPULATION WILL SHRINK. This is intended (welfare needs welfare infrastructure) but easy to hit by accident, so build at least one welfare office before enabling this, or leave it off. The setting is off by default.
 
 Recipient counts mirror the game's own rule exactly (living non-workers: children/teens = family allowance, elderly = pension, adults = unemployment while still inside the allowance window).
 
@@ -30,7 +32,7 @@ Made with Claude Code, Anthropic's agentic coding tool.
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.0" />
+	<ModVersion Value="1.1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.6.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -38,7 +40,7 @@ Made with Claude Code, Anthropic's agentic coding tool.
 	<!--Required DLC, can be set multiple times.-->
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="" />
+	<ChangeLog Value="'Fund benefits from the treasury' is now OFF by default. Added a clear warning (in-game and here) that turning it on with no welfare office suspends all benefits and shrinks your population — build a welfare office first, or leave it off. No change to the gate behaviour itself." />
 	<!--External link, can be set multiple times.-->
 	<ExternalLink Type="github" Url="https://github.com/AmicusDeus/WelfareManagement" />
 	<!--Supported values Public, Private, Unlisted-->

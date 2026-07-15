@@ -16,7 +16,7 @@ namespace WelfareManagement
             { "group.general", "General" },
 
             { "benefitsFunded.L", "Fund benefits from the treasury" },
-            { "benefitsFunded.D", "Vanilla mints pensions, unemployment and family allowance for free. When on, the real daily outlay is deducted from the city treasury and shown as a budget expense (Subsidies). Off = vanilla behaviour." },
+            { "benefitsFunded.D", "Vanilla mints pensions, unemployment and family allowance for free. When on, the real daily outlay is deducted from the city treasury and shown as a budget expense (Subsidies). Off = vanilla behaviour.\n\nWARNING: benefits are administered by a welfare office. With this ON and NO welfare office in your city, benefits are suspended entirely — citizens receive nothing (no minting), which starves non-working households of income and shrinks your population. Build a welfare office before enabling this, or leave it off." },
 
             { "pension.L", "Pension amount" },
             { "pension.D", "Scales the pension paid to each elderly non-worker. 100% = vanilla." },
