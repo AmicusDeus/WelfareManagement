@@ -19,7 +19,7 @@ Recipient counts mirror the game's own rule exactly (`EconomyUtils.GetHouseholdI
 This is one of three mods that replace the older all-in-one **Economy Tweaks**. The others are **Private Schools & Hospitals** and **Service & Sanitation Levy**. Don't run Economy Tweaks alongside these (they would double-apply).
 
 ## Credits
-Made with Claude Code, Anthropic's agentic coding tool.
+Made with Claude Code's Opus 4.8 and Fable 5 models.
 
 ## License
 MIT — see [LICENSE](LICENSE).
