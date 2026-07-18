@@ -33,6 +33,8 @@ namespace WelfareManagement
                 lm.AddSource(locale, new LocaleSource(ActiveSetting, locale));
 
             AssetDatabase.global.LoadSettings(nameof(WelfareManagement), ActiveSetting, new Setting(this));
+            // Persist every settings change to disk the moment it is applied (survives a crash / non-clean exit).
+            ActiveSetting.onSettingsApplied += OnSettingsApplied;
 
             // Systems that apply the settings in-game.
             updateSystem.UpdateAt<EconomySystem>(SystemUpdatePhase.GameSimulation);        // scale + welfare-office gate
@@ -47,6 +49,17 @@ namespace WelfareManagement
             log.Info("Realistic Funding & Management: Welfare Benefits loaded.");
         }
 
+        // Persist a settings change to disk as soon as it is applied (guard: ApplyAndSave re-raises onSettingsApplied).
+        private static bool s_savingReentrant;
+        private static void OnSettingsApplied(Game.Settings.Setting setting)
+        {
+            if (s_savingReentrant)
+                return;
+            s_savingReentrant = true;
+            try { ActiveSetting?.ApplyAndSave(); }
+            finally { s_savingReentrant = false; }
+        }
+
         public void OnDispose()
         {
             log.Info(nameof(OnDispose));
@@ -55,6 +68,7 @@ namespace WelfareManagement
 
             if (ActiveSetting != null)
             {
+                ActiveSetting.onSettingsApplied -= OnSettingsApplied;
                 ActiveSetting.UnregisterInOptionsUI();
                 ActiveSetting = null;
             }
