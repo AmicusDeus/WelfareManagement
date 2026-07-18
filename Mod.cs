@@ -44,7 +44,7 @@ namespace WelfareManagement
             // UI bridge — the benefits panel + budget breakdown.
             updateSystem.UpdateAt<WelfareUISystem>(SystemUpdatePhase.UIUpdate);
 
-            log.Info("Welfare Management loaded.");
+            log.Info("Realistic Funding & Management: Welfare Benefits loaded.");
         }
 
         public void OnDispose()

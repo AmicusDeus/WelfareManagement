@@ -7,7 +7,7 @@ import { useT } from "mods/i18n";
 import { FONT, TEXT, panelTitle, sectionTitle } from "mods/ui-tokens";
 import ICON from "../wm-icon.svg";
 
-// Welfare Management UI — the benefits panel (fund toggle + 3 sliders + welfare-office gate warning), the toolbar
+// Realistic Funding & Management: Welfare Benefits UI — the benefits panel (fund toggle + 3 sliders + welfare-office gate warning), the toolbar
 // button, and the Budget "Citizen Benefits" detail sub-item + hover box.
 const G = "WMParams";
 const TAX_SLIDER_PATH = "game-ui/game/components/economy-panel/taxation-page/tax-slider.tsx";
@@ -109,7 +109,7 @@ const BenefitRow = ({ p, funded }: { p: P; funded: boolean }) => {
 
 export const WelfareButton = () => {
     const t = useT();
-    return <FloatingButton src={ICON} tooltipLabel={t("buttonTooltip", "Welfare Management")} onSelect={() => setOpen(!_open)} />;
+    return <FloatingButton src={ICON} tooltipLabel={t("buttonTooltip", "Realistic Funding & Management: Welfare Benefits")} onSelect={() => setOpen(!_open)} />;
 };
 
 export const WelfarePanelHost = () => {
@@ -128,7 +128,7 @@ export const WelfarePanelHost = () => {
             color: TEXT, boxShadow: "0 4rem 24rem rgba(0,0,0,0.5)",
         }}>
             <div style={{ display: "flex", alignItems: "center", padding: "10rem 14rem", borderBottom: "1rem solid rgba(255,255,255,0.12)" }}>
-                <div style={{ flex: 1, ...panelTitle }}>{t("panelTitle", "WELFARE MANAGEMENT")}</div>
+                <div style={{ flex: 1, ...panelTitle }}>{t("panelTitle", "Welfare Benefits")}</div>
                 <CloseGlyph onClick={() => setOpen(false)} />
             </div>
             <div style={{ padding: "8rem 0 10rem", maxHeight: "860rem", overflowY: "auto" }}>

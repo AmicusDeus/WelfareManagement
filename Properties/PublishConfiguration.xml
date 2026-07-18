@@ -2,12 +2,12 @@
 	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
 	<ModId Value="151387" />
 	<!--Name of the mod to display to players-->
-	<DisplayName Value="Welfare Management" />
+	<DisplayName Value="Realistic Funding &amp; Management: Welfare Benefits" />
 	<!--Short description of the mod-->
 	<ShortDescription Value="Make citizen benefits (pension, unemployment, family allowance) cost the city treasury, scale them, and gate them behind welfare offices." />
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<LongDescription>
-Vanilla Cities: Skylines II "mints" pensions, unemployment and family allowance straight into households at no cost to the city. Welfare Management turns benefits into a real budget item and gives you control over them.
+Vanilla Cities: Skylines II "mints" pensions, unemployment and family allowance straight into households at no cost to the city. Realistic Funding &amp; Management: Welfare Benefits turns benefits into a real budget item and gives you control over them.
 
 - Treasury-funded benefits: the real daily outlay is deducted from the city treasury and shown as a budget expense (Subsidies). OFF BY DEFAULT — turn it on to enable; off = exact vanilla behaviour.
 - Scale each benefit 0-200% (100% = vanilla) — pension, unemployment, family allowance.
@@ -32,7 +32,7 @@ Made with Claude Code's Opus 4.8 and Fable 5 models.
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.1" />
+	<ModVersion Value="1.2" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.6.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -40,7 +40,7 @@ Made with Claude Code's Opus 4.8 and Fable 5 models.
 	<!--Required DLC, can be set multiple times.-->
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog Value="'Fund benefits from the treasury' is now OFF by default. Added a clear warning (in-game and here) that turning it on with no welfare office suspends all benefits and shrinks your population — build a welfare office first, or leave it off. No change to the gate behaviour itself." />
+	<ChangeLog Value="Renamed to &quot;Realistic Funding &amp; Management: Welfare Benefits&quot; — same mod, clearer name, with a refreshed thumbnail. No functional or settings changes; your existing configuration carries over." />
 	<!--External link, can be set multiple times.-->
 	<ExternalLink Type="github" Url="https://github.com/AmicusDeus/WelfareManagement" />
 	<!--Supported values Public, Private, Unlisted-->

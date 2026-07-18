@@ -10,7 +10,7 @@ namespace WelfareManagement
 
         public static readonly Dictionary<string, string> En = new Dictionary<string, string>
         {
-            { "mod.name", "Welfare Management" },
+            { "mod.name", "Realistic Funding & Management: Welfare Benefits" },
             { "tab.main", "Main" },
             { "group.benefits", "Citizen benefits" },
             { "group.general", "General" },
