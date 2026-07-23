@@ -1,16 +1,16 @@
 # Welfare Management
 
-A Cities: Skylines II mod that turns citizen benefits (pension, unemployment, family allowance) into a real cost to the city treasury, lets you scale them, and gates them behind welfare offices.
+A Cities: Skylines II mod that turns citizen benefits (pension, unemployment, family allowance) into a real cost to the city treasury and lets you scale them, with treasury funding administered by welfare offices.
 
 ## Features
 - **Treasury-funded benefits** — vanilla mints benefits for free; this deducts the real daily outlay from the treasury and shows it as a budget expense (Subsidies). Off = vanilla behaviour.
 - **Scale each benefit 0–200%** (pension, unemployment, family allowance) from an in-game panel or the Options page.
-- **Welfare-office gate** — with funding on, benefits are only paid if the city has at least one welfare office. No office = benefits suspended (citizens receive nothing; the treasury pays nothing). No minting.
+- **Welfare-office gate** — with funding on, benefits are charged to the treasury only while the city has a welfare office to administer them. No office = benefits fall back to the base game (still paid, minted free, not charged to the treasury), so your city keeps growing normally, and a warning reminds you to build a welfare office to actually fund them from the treasury.
 
-## ⚠️ Important — the welfare-office gate can shrink your population
-"Fund benefits from the treasury" is **off by default**. When you turn it **on**, benefits become the responsibility of a **welfare office** — and if your city has **no welfare office**, benefits are gated to **zero**: pensioners, out-of-work adults and families receive **nothing** (the treasury doesn't pay it either). Those non-working households then run out of money and leave, so your **population will shrink**.
+## The welfare-office gate
+"Fund benefits from the treasury" is **off by default**. When you turn it **on**, treasury funding is administered by a **welfare office**. If your city has **no welfare office yet**, the mod does **not** charge the treasury and does **not** change anything for citizens — benefits are simply paid by the base game (free), so immigration and growth are unaffected, and a settings/panel warning reminds you to build a welfare office. Building one switches funding over to the treasury.
 
-This is intended (welfare requires welfare infrastructure), but it's easy to hit by accident. So: **build at least one welfare office before enabling treasury funding, or leave the setting off.** With it off, the mod does nothing and the game behaves exactly like vanilla.
+(Earlier versions, up to v1.21, instead *zeroed* benefits when funding was on with no office — that starved non-working households and could stall a new city's growth. v1.22 replaced that hard-zero with the free-fallback-plus-warning above.)
 
 ## How it works (transparency)
 Recipient counts mirror the game's own rule exactly (`EconomyUtils.GetHouseholdIncome`): each living, non-working member of a resident household — children/teens draw family allowance, the elderly draw pension, out-of-work adults draw unemployment while still inside the allowance window. The mod counts them once per in-game day, multiplies by the current (%-scaled) benefit amounts, and folds the total into the game's own budget as a real `SubsidyResidential` expense — so the native budget system deducts it from the treasury. It never mints money or pokes `PlayerMoney` out of band. A small Harmony postfix keeps the budget panel from flickering (falls back safely if it can't install). Treasury funding is opt-in (off by default); with it off the mod is pure vanilla.

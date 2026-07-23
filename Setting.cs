@@ -20,12 +20,18 @@ namespace WelfareManagement
 
         // ---- Citizen benefits (percent of vanilla; 100% = unchanged) ----
         // Opt-IN: OFF by default (safe = pure vanilla, the game mints benefits free). When ON, the real benefit outlay
-        // is deducted from the city treasury (shown as a budget cost). WARNING: benefits are administered by a welfare
-        // office — with this ON and NO welfare office in the city, benefits are gated to ZERO (citizens receive
-        // nothing), which starves non-working households of income and shrinks the population. Build a welfare office,
-        // or leave this OFF. (Default flipped to OFF in v1.1 so this can't be hit by accident.)
+        // is deducted from the city treasury (shown as a budget cost) — but only once a WELFARE OFFICE is present to
+        // administer it. With this ON and NO welfare office, benefits are NOT charged to the treasury: they fall back to
+        // the base-game default (paid, minted free) and a warning prompts you to build an office. (v1.22: this used to
+        // ZERO benefits with no office, which collapsed immigration and could deadlock a new city — fixed.)
         [SettingsUISection(Section, GroupBenefits)]
+        [SettingsUIWarning(typeof(Setting), nameof(NeedsWelfareOffice))]
         public bool BenefitsFundedByTreasury { get; set; } = false;
+
+        // Options-page warning condition: treasury funding is on but the city has no welfare office to administer it, so
+        // funding isn't actually happening (benefits fall back to free base-game minting). Reads the live office count
+        // that EconomySystem publishes. Returns true => the warning shows on the toggle.
+        public bool NeedsWelfareOffice() => BenefitsFundedByTreasury && EconomySystem.LiveWelfareOfficeCount == 0;
 
         [SettingsUISlider(min = 0f, max = 200f, step = 5f, unit = "percentage")]
         [SettingsUISection(Section, GroupBenefits)]

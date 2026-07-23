@@ -150,7 +150,7 @@ export const WelfarePanelHost = () => {
                 </div>
                 {funded && gated ? (
                     <div style={{ margin: "0 14rem 8rem", padding: "6rem 10rem", borderRadius: "4rem", background: "rgba(220, 160, 60, 0.18)", border: "1rem solid rgba(220, 160, 60, 0.5)", fontSize: "12rem", color: "rgb(240, 190, 110)" }}>
-                        {t("welfareWarning", "No welfare office in the city — benefits are suspended (nobody administers them). Build a Welfare Office to resume payouts.")}
+                        {t("welfareWarning", "No welfare office in the city — benefits are paid by the base game (free) and not charged to the treasury. Build a Welfare Office to fund them from the treasury.")}
                     </div>
                 ) : null}
                 {funded && !gated && offices > 0 ? (

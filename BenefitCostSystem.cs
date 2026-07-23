@@ -25,6 +25,7 @@ namespace WelfareManagement
     public partial class BenefitCostSystem : GameSystemBase
     {
         private SimulationSystem m_Sim;
+        private EconomySystem m_Economy;
         private EntityQuery m_TimeQuery;
         private EntityQuery m_TimeSettingsQuery;
         private EntityQuery m_EconQuery;
@@ -50,6 +51,7 @@ namespace WelfareManagement
         {
             base.OnCreate();
             m_Sim = World.GetOrCreateSystemManaged<SimulationSystem>();
+            m_Economy = World.GetOrCreateSystemManaged<EconomySystem>();
             m_TimeQuery = GetEntityQuery(ComponentType.ReadOnly<TimeData>());
             m_TimeSettingsQuery = GetEntityQuery(ComponentType.ReadOnly<TimeSettingsData>());
             m_EconQuery = GetEntityQuery(ComponentType.ReadOnly<EconomyParameterData>());
@@ -85,7 +87,10 @@ namespace WelfareManagement
             if (s == null || m_EconQuery.IsEmptyIgnoreFilter || m_TimeQuery.IsEmptyIgnoreFilter)
                 return;
 
-            bool funding = s.BenefitsFundedByTreasury;
+            // Charge the treasury only when funding is on AND a welfare office is administering it. While gated
+            // (funding on, no office) benefits fall back to base-game FREE minting, so the treasury pays nothing —
+            // treat it exactly like funding-off here.
+            bool funding = s.BenefitsFundedByTreasury && !(m_Economy != null && m_Economy.BenefitsGatedOff);
             EconomyParameterData econ = m_EconQuery.GetSingleton<EconomyParameterData>();
             int day = TimeSystem.GetDay(m_Sim.frameIndex, m_TimeQuery.GetSingleton<TimeData>());
 

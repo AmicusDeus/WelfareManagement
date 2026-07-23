@@ -39,6 +39,7 @@ namespace WelfareManagement
             };
 
             Opt(d, nameof(Setting.BenefitsFundedByTreasury), "benefitsFunded");
+            d[s.GetOptionWarningLocaleID(nameof(Setting.BenefitsFundedByTreasury))] = T("benefitsFunded.W");
             Opt(d, nameof(Setting.PensionPercent), "pension");
             Opt(d, nameof(Setting.UnemploymentBenefitPercent), "unemployment");
             Opt(d, nameof(Setting.FamilyAllowancePercent), "family");

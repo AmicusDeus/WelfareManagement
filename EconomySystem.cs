@@ -11,11 +11,14 @@ namespace WelfareManagement
     // configured percentages. Captures the vanilla values once so 100% always means "unchanged". Wages, minimum
     // earnings and starting money are left untouched.
     //
-    // WELFARE-OFFICE GATE (user-designed): while the mod owns benefits (BenefitsFundedByTreasury on), benefits are
-    // only paid if at least one welfare office exists in the city — no office => the amounts are zeroed, so citizens
-    // genuinely receive nothing (no vanilla minting either) and the treasury pays nothing. Funding OFF = pure
-    // vanilla, no gating. Two detection layers: the runtime WelfareOffice component, plus a prefab-data scan
-    // (WelfareOfficeData) in case the runtime archetype differs.
+    // WELFARE-OFFICE GATE: treasury funding (BenefitsFundedByTreasury) is only ADMINISTERED once the city has a welfare
+    // office. With funding on but NO office, the mod does NOT zero benefits (v1.21 and earlier did — that starved
+    // non-working households of income and could DEADLOCK a new city: only elderly can move in, so it never grows enough
+    // to build the office that would un-gate it). Instead this state falls back to base-game behaviour: benefits are
+    // still paid at the chosen levels but MINTED FREE (not charged to the treasury) — BenefitCostSystem bills the
+    // treasury nothing while gated (it reads BenefitsGatedOff). Building a welfare office switches funding over to the
+    // treasury; a settings warning (Setting.NeedsWelfareOffice) prompts for one. Funding OFF = pure vanilla. Two
+    // office-detection layers: the runtime WelfareOffice component, plus a prefab-data scan (WelfareOfficeData).
     public partial class EconomySystem : GameSystemBase
     {
         private EntityQuery m_Query;
@@ -25,9 +28,14 @@ namespace WelfareManagement
         private int m_Pension, m_Unemployment, m_Family;
         private int m_Tick;
 
-        // For diagnostics: number of welfare offices, and whether benefits are currently gated OFF by it.
+        // For diagnostics: number of welfare offices, and whether benefits are currently gated (funding on, no office).
         public int WelfareOfficeCount { get; private set; }
         public bool BenefitsGatedOff { get; private set; }
+
+        // Live welfare-office count, exposed statically so the Options-page warning (Setting.NeedsWelfareOffice) can read
+        // it without a system reference. Refreshed on the same cadence as WelfareOfficeCount. -1 = "unknown" (no city
+        // simulating yet, e.g. the main menu) so the warning stays hidden until a real count is known.
+        public static int LiveWelfareOfficeCount { get; private set; } = -1;
 
         protected override void OnCreate()
         {
@@ -57,6 +65,15 @@ namespace WelfareManagement
         }
 
         public override int GetUpdateInterval(SystemUpdatePhase phase) => 64;
+
+        // Back to the main menu / no city simulating: reset the static count to "unknown" so the Options-page warning
+        // doesn't read a previous city's value (RequireForUpdate(m_Query) stops this system when EconomyParameterData
+        // goes away on unload).
+        protected override void OnStopRunning()
+        {
+            base.OnStopRunning();
+            LiveWelfareOfficeCount = -1;
+        }
 
         // Runtime-component count first (cheap); prefab-data scan only when it finds nothing.
         private void RefreshWelfareOffices()
@@ -98,6 +115,7 @@ namespace WelfareManagement
                 blds.Dispose();
             }
             WelfareOfficeCount = count;
+            LiveWelfareOfficeCount = count;
         }
 
         protected override void OnUpdate()
@@ -121,13 +139,15 @@ namespace WelfareManagement
                 m_Family = d.m_FamilyAllowance;
             }
 
-            // Gate: with treasury funding on and no welfare office, nobody administers benefits => nothing is paid.
+            // Treasury funding on but no welfare office to administer it. Do NOT zero benefits (that collapses
+            // non-working immigration and can deadlock a new city) — leave the amounts at the chosen levels and let
+            // BenefitCostSystem bill the treasury nothing while gated, i.e. fall back to base-game free minting. A
+            // welfare office switches funding over to the treasury.
             BenefitsGatedOff = s.BenefitsFundedByTreasury && WelfareOfficeCount == 0;
-            float gate = BenefitsGatedOff ? 0f : 1f;
 
-            d.m_Pension = Scale(m_Pension, SanePct(s.PensionPercent) * gate);
-            d.m_UnemploymentBenefit = Scale(m_Unemployment, SanePct(s.UnemploymentBenefitPercent) * gate);
-            d.m_FamilyAllowance = Scale(m_Family, SanePct(s.FamilyAllowancePercent) * gate);
+            d.m_Pension = Scale(m_Pension, SanePct(s.PensionPercent));
+            d.m_UnemploymentBenefit = Scale(m_Unemployment, SanePct(s.UnemploymentBenefitPercent));
+            d.m_FamilyAllowance = Scale(m_Family, SanePct(s.FamilyAllowancePercent));
 
             EntityManager.SetComponentData(entity, d);
         }
