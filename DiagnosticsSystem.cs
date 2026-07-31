@@ -50,12 +50,12 @@ namespace WelfareManagement
 
         private void Dump(int day)
         {
-            Setting s = Mod.ActiveSetting;
+            WelfareManagementSetting s = Mod.ActiveSetting;
             if (s == null)
                 return;
             Mod.log.Info($"[SelfTest] day={day} settings: BenefitsFunded={s.BenefitsFundedByTreasury} " +
                          $"pension%={s.PensionPercent} unemployment%={s.UnemploymentBenefitPercent} family%={s.FamilyAllowancePercent} " +
-                         $"achievements={s.EnableAchievements} budgetSync={(HarmonyPatcher.BudgetDisplaySyncActive ? "ACTIVE" : "FALLBACK")}");
+                         $"budgetSync={(HarmonyPatcher.BudgetDisplaySyncActive ? "ACTIVE" : "FALLBACK")}");
             Mod.log.Info($"[SelfTest] benefits: funded={s.BenefitsFundedByTreasury} welfareOffices={m_Econ.WelfareOfficeCount} gatedOff={m_Econ.BenefitsGatedOff} " +
                          $"pension={m_Benefits.PensionCost} unemployment={m_Benefits.UnemploymentCost} family={m_Benefits.FamilyCost} total={m_Benefits.TotalCost}");
         }

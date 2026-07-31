@@ -6,7 +6,7 @@ using Unity.Entities;
 
 namespace WelfareManagement
 {
-    // Backs the Welfare panel: a percentage per benefit (from Setting), the LIVE per-recipient value (from
+    // Backs the Welfare panel: a percentage per benefit (from WelfareManagementSetting), the LIVE per-recipient value (from
     // EconomyParameterData), and the per-day treasury COST (from BenefitCostSystem), plus the "fund benefits" toggle
     // and the welfare-office gate state. Bindings (group "WMParams") consumed by UI/src/mods/welfare.tsx.
     public partial class WelfareUISystem : UISystemBase
@@ -16,8 +16,8 @@ namespace WelfareManagement
         private sealed class Def
         {
             public string Key;
-            public Func<Setting, float> GetPct;
-            public Action<Setting, float> SetPct;
+            public Func<WelfareManagementSetting, float> GetPct;
+            public Action<WelfareManagementSetting, float> SetPct;
             public Func<EconomyParameterData, int> GetLive;
             public Func<BenefitCostSystem, int> GetCost;
             public GetterValueBinding<float> PctBinding;
@@ -40,7 +40,7 @@ namespace WelfareManagement
         private int m_TotalCostValue;
         private int m_Tick;
 
-        private static Setting S => Mod.ActiveSetting;
+        private static WelfareManagementSetting S => Mod.ActiveSetting;
 
         protected override void OnCreate()
         {
@@ -102,7 +102,7 @@ namespace WelfareManagement
                 S.onSettingsApplied += OnSettingsApplied;
         }
 
-        private static Def Make(string key, Func<Setting, float> get, Action<Setting, float> set, Func<EconomyParameterData, int> live, Func<BenefitCostSystem, int> cost)
+        private static Def Make(string key, Func<WelfareManagementSetting, float> get, Action<WelfareManagementSetting, float> set, Func<EconomyParameterData, int> live, Func<BenefitCostSystem, int> cost)
             => new Def { Key = key, GetPct = get, SetPct = set, GetLive = live, GetCost = cost };
 
         private int HoursPerMonth()

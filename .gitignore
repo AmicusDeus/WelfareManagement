@@ -4,3 +4,4 @@ UI/node_modules/
 UI/build/
 *.user
 .vs/
+Library/

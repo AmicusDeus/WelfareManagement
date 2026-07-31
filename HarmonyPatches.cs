@@ -87,7 +87,7 @@ namespace WelfareManagement
             try
             {
                 World world = __instance.World;
-                Setting s = Mod.ActiveSetting;
+                WelfareManagementSetting s = Mod.ActiveSetting;
                 if (world == null || s == null)
                     return;
 

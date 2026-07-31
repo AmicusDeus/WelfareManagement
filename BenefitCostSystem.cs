@@ -83,14 +83,14 @@ namespace WelfareManagement
 
         protected override void OnUpdate()
         {
-            Setting s = Mod.ActiveSetting;
+            WelfareManagementSetting s = Mod.ActiveSetting;
             if (s == null || m_EconQuery.IsEmptyIgnoreFilter || m_TimeQuery.IsEmptyIgnoreFilter)
                 return;
 
             // Charge the treasury only when funding is on AND a welfare office is administering it. While gated
             // (funding on, no office) benefits fall back to base-game FREE minting, so the treasury pays nothing —
             // treat it exactly like funding-off here.
-            bool funding = s.BenefitsFundedByTreasury && !(m_Economy != null && m_Economy.BenefitsGatedOff);
+            bool funding = s.Enabled && s.BenefitsFundedByTreasury && !(m_Economy != null && m_Economy.BenefitsGatedOff);
             EconomyParameterData econ = m_EconQuery.GetSingleton<EconomyParameterData>();
             int day = TimeSystem.GetDay(m_Sim.frameIndex, m_TimeQuery.GetSingleton<TimeData>());
 

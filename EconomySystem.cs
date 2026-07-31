@@ -17,7 +17,7 @@ namespace WelfareManagement
     // to build the office that would un-gate it). Instead this state falls back to base-game behaviour: benefits are
     // still paid at the chosen levels but MINTED FREE (not charged to the treasury) — BenefitCostSystem bills the
     // treasury nothing while gated (it reads BenefitsGatedOff). Building a welfare office switches funding over to the
-    // treasury; a settings warning (Setting.NeedsWelfareOffice) prompts for one. Funding OFF = pure vanilla. Two
+    // treasury; a settings warning (WelfareManagementSetting.NeedsWelfareOffice) prompts for one. Funding OFF = pure vanilla. Two
     // office-detection layers: the runtime WelfareOffice component, plus a prefab-data scan (WelfareOfficeData).
     public partial class EconomySystem : GameSystemBase
     {
@@ -32,7 +32,7 @@ namespace WelfareManagement
         public int WelfareOfficeCount { get; private set; }
         public bool BenefitsGatedOff { get; private set; }
 
-        // Live welfare-office count, exposed statically so the Options-page warning (Setting.NeedsWelfareOffice) can read
+        // Live welfare-office count, exposed statically so the Options-page warning (WelfareManagementSetting.NeedsWelfareOffice) can read
         // it without a system reference. Refreshed on the same cadence as WelfareOfficeCount. -1 = "unknown" (no city
         // simulating yet, e.g. the main menu) so the warning stays hidden until a real count is known.
         public static int LiveWelfareOfficeCount { get; private set; } = -1;
@@ -120,17 +120,15 @@ namespace WelfareManagement
 
         protected override void OnUpdate()
         {
-            Setting s = Mod.ActiveSetting;
+            WelfareManagementSetting s = Mod.ActiveSetting;
             if (s == null)
                 return;
-
-            // The scan is heavier than the rest of this tick, so refresh every 8th update (~ once per in-game hour).
-            if (m_Tick++ % 8 == 0)
-                RefreshWelfareOffices();
 
             Entity entity = m_Query.GetSingletonEntity();
             EconomyParameterData d = EntityManager.GetComponentData<EconomyParameterData>(entity);
 
+            // Capture the vanilla benefit amounts once. EconomyParameterData is re-derived from prefabs on every load,
+            // so this is always the base-game value — the anchor we restore to when disabled or at 100%.
             if (!m_Captured)
             {
                 m_Captured = true;
@@ -138,6 +136,25 @@ namespace WelfareManagement
                 m_Unemployment = d.m_UnemploymentBenefit;
                 m_Family = d.m_FamilyAllowance;
             }
+
+            // Master switch OFF => behave exactly like vanilla: restore the original benefit amounts and charge the
+            // treasury nothing (BenefitCostSystem also gates on Enabled). The player's other settings are left as-is.
+            if (!s.Enabled)
+            {
+                BenefitsGatedOff = false;
+                if (d.m_Pension != m_Pension || d.m_UnemploymentBenefit != m_Unemployment || d.m_FamilyAllowance != m_Family)
+                {
+                    d.m_Pension = m_Pension;
+                    d.m_UnemploymentBenefit = m_Unemployment;
+                    d.m_FamilyAllowance = m_Family;
+                    EntityManager.SetComponentData(entity, d);
+                }
+                return;
+            }
+
+            // The scan is heavier than the rest of this tick, so refresh every 8th update (~ once per in-game hour).
+            if (m_Tick++ % 8 == 0)
+                RefreshWelfareOffices();
 
             // Treasury funding on but no welfare office to administer it. Do NOT zero benefits (that collapses
             // non-working immigration and can deadlock a new city) — leave the amounts at the chosen levels and let

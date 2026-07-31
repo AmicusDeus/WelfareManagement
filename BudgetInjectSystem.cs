@@ -36,7 +36,7 @@ namespace WelfareManagement
 
         protected override void OnUpdate()
         {
-            Setting s = Mod.ActiveSetting;
+            WelfareManagementSetting s = Mod.ActiveSetting;
             if (s == null)
                 return;
 
